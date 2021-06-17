@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 const useFetch = (url) => {
 	const [isLoading, setIsLoading] = useState(true)
@@ -6,8 +6,10 @@ const useFetch = (url) => {
 	const [error, setError] = useState(null)
 
 	useEffect(() => {
+		const abortCont = new AbortController()
+
 		setTimeout(() => {
-			fetch(url)
+			fetch(url, { signal: abortCont.signal })
 				.then((res) => {
 					console.log(`res`, res)
 					if (!res.ok) {
@@ -21,10 +23,13 @@ const useFetch = (url) => {
 					setIsLoading(false)
 				})
 				.catch((err) => {
-					setError(err.message)
-					setIsLoading(false)
+					if (err.name !== 'AbortError') {
+						setError(err.message)
+						setIsLoading(false)
+					}
 				})
 		}, 1500)
+		return () => abortCont.abort()
 	}, [url])
 
 	return { isLoading, data, error }
