@@ -2,25 +2,19 @@ import React, { useState, useEffect } from 'react'
 import BlogList from './BlogList'
 
 const Home = () => {
-	const [blogs, setBlogs] = useState([
-		{ title: 'Title #1', body: 'Yadayada 1111', author: 'Sean', id: 1 },
-		{ title: 'Title #22', body: 'Blahblahblah 222222', author: 'Louis', id: 2 },
-		{ title: 'Title #333', body: 'CoughCough 3', author: 'Bogolin', id: 3 },
-		{ title: 'Title #4444', body: 'For Four Forreeee!', author: 'Sean', id: 4 },
-	])
-
-	const [name, setName] = useState('Bogo')
+	const [blogs, setBlogs] = useState([])
 
 	useEffect(() => {
-		console.log(`UseEffect`)
-	}, [name])
+		fetch('http://localhost:8000/blogs')
+			.then((res) => {
+				return res.json()
+			})
+			.then((data) => {
+				setBlogs(data)
+			})
+	}, [])
 
 	const handleDelete = (id) => {
-		const newBlogs = blogs.filter((blog) => blog.id !== id)
-		setBlogs(newBlogs)
-	}
-
-	const handleNameChange = (id) => {
 		const newBlogs = blogs.filter((blog) => blog.id !== id)
 		setBlogs(newBlogs)
 	}
@@ -28,19 +22,14 @@ const Home = () => {
 	return (
 		<div className='home'>
 			<div>
-				<BlogList
-					blogs={blogs}
-					heading='All Blogs'
-					handleDelete={handleDelete}
-				/>
-				<button
-					onClick={() => {
-						setName('WhatWhat')
-					}}
-				>
-					Change Name
-				</button>
-				<p>{name}</p>
+				{blogs && (
+					<BlogList
+						blogs={blogs}
+						heading='All Blogs'
+						handleDelete={handleDelete}
+					/>
+				)}
+
 				{/* <BlogList
 					blogs={blogs.filter((blog) => blog.author === 'Sean')}
 					heading="Sean's Blogs"
