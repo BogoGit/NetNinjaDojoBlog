@@ -26,3 +26,9 @@
 .content {
 	padding: 1rem;
 }
+
+.blog-preview {
+	padding: 1rem;
+	margin: 1rem 0;
+	border: solid 1px #000;
+}
