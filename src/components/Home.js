@@ -2,16 +2,30 @@ import React, { useState, useEffect } from 'react'
 import BlogList from './BlogList'
 
 const Home = () => {
+	const [isLoading, setIsLoading] = useState(true)
 	const [blogs, setBlogs] = useState([])
+	const [error, setError] = useState(null)
 
 	useEffect(() => {
-		fetch('http://localhost:8000/blogs')
-			.then((res) => {
-				return res.json()
-			})
-			.then((data) => {
-				setBlogs(data)
-			})
+		setTimeout(() => {
+			fetch('http://localhost:8000/blogs')
+				.then((res) => {
+					console.log(`res`, res)
+					if (!res.ok) {
+						throw Error("Couldn't fetch data.")
+					}
+					return res.json()
+				})
+				.then((data) => {
+					setBlogs(data)
+					setError(null)
+					setIsLoading(false)
+				})
+				.catch((err) => {
+					setError(err.message)
+					setIsLoading(false)
+				})
+		}, 1500)
 	}, [])
 
 	const handleDelete = (id) => {
@@ -22,6 +36,8 @@ const Home = () => {
 	return (
 		<div className='home'>
 			<div>
+				{error && <div>{error}</div>}
+				{isLoading && <div>Loading...</div>}
 				{blogs && (
 					<BlogList
 						blogs={blogs}
