@@ -1,38 +1,36 @@
 import { useState, useEffect } from 'react'
 
 const useFetch = (url) => {
-	const [isLoading, setIsLoading] = useState(true)
 	const [data, setData] = useState([])
+	const [isLoading, setIsLoading] = useState(true)
 	const [error, setError] = useState(null)
 
 	useEffect(() => {
 		const abortCont = new AbortController()
 
-		setTimeout(() => {
-			fetch(url, { signal: abortCont.signal })
-				.then((res) => {
-					console.log(`res`, res)
-					if (!res.ok) {
-						throw Error("Couldn't fetch data.")
-					}
-					return res.json()
-				})
-				.then((data) => {
-					setData(data)
-					setError(null)
+		fetch(url, { signal: abortCont.signal })
+			.then((res) => {
+				console.log(`res`, res)
+				if (!res.ok) {
+					throw Error("Couldn't fetch data.")
+				}
+				return res.json()
+			})
+			.then((data) => {
+				setData(data)
+				setIsLoading(false)
+				setError(null)
+			})
+			.catch((err) => {
+				if (err.name !== 'AbortError') {
 					setIsLoading(false)
-				})
-				.catch((err) => {
-					if (err.name !== 'AbortError') {
-						setError(err.message)
-						setIsLoading(false)
-					}
-				})
-		}, 1500)
+					setError(err.message)
+				}
+			})
 		return () => abortCont.abort()
 	}, [url])
 
-	return { isLoading, data, error }
+	return { data, isLoading, error }
 }
 
 export default useFetch
