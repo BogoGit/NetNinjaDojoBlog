@@ -1,12 +1,6 @@
 {
   "blogs": [
     {
-      "title": "Title #1",
-      "body": "Yadayada 1111",
-      "author": "Sean",
-      "id": 1
-    },
-    {
       "title": "Title #22",
       "body": "Blahblahblah 222222",
       "author": "Louis",
@@ -17,12 +11,6 @@
       "body": "CoughCough 3",
       "author": "Bogolin",
       "id": 3
-    },
-    {
-      "title": "Title #4444",
-      "body": "For Four Forreeee!",
-      "author": "Sean",
-      "id": 4
     },
     {
       "title": "Button Clicked",
